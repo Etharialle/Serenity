@@ -30,10 +30,10 @@
 *.exe
 *.out
 *.app
-*/executables/*
+**/executables/*
 
 # Build Files
-*/build/*
+**/build/
 
 # VSCode
 .vscode*
