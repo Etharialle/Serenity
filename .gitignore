@@ -33,7 +33,7 @@
 */executables/*
 
 # Build Files
-*./build/*
+*/build/*
 
 # VSCode
 .vscode*
