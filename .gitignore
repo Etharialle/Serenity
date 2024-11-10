@@ -31,3 +31,9 @@
 *.out
 *.app
 */executables/*
+
+# Build Files
+*./build/*
+
+# VSCode
+.vscode*
