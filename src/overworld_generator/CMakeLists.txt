@@ -30,7 +30,7 @@ set_target_properties(overworld_generator PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "../executables"
 )
 #set_target_properties(drunkards_walk_test PROPERTIES
-#    RUNTIME_OUTPUT_DIRECTORY "../executables"
+#    RUNTIME_OUTPUT_DIRECTORY "../tests"
 #)
 
 # Add testing support
