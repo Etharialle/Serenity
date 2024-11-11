@@ -41,9 +41,3 @@ add_test(NAME DrunkardsWalkTest COMMAND drunkards_walk_test)
 #set_target_properties(drunkards_walk_test PROPERTIES
 #    RUNTIME_OUTPUT_DIRECTORY "../executables"
 #)
-
-# Add testing support
-enable_testing()
-
-# Link tests with the executable
-add_test(NAME DrunkardsWalkTest COMMAND drunkards_walk_test)
