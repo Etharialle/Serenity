@@ -44,24 +44,3 @@ void displayMap(const std::vector<std::vector<int>>& map) {
         std::cout << std::endl;
     }
 }
-
-int main() {
-    int rows = 20;       // Map dimensions
-    int cols = 30;
-    int steps = 100;     // Number of steps for the drunkard's walk
-
-    // Initialize the map with walls (0)
-    std::vector<std::vector<int>> map(rows, std::vector<int>(cols, 0));
-
-    // Start the walk from the center of the map
-    int startX = rows / 2;
-    int startY = cols / 2;
-
-    // Run the drunkard's walk algorithm
-    drunkardsWalk(map, startX, startY, steps);
-
-    // Display the generated map
-    displayMap(map);
-
-    return 0;
-}
