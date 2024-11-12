@@ -9,6 +9,11 @@ int main() {
     int cols = 300;
     int steps = 100000;     // Number of steps for the drunkard's walk
 
+    std::cout << "height of map (pixels): ";
+    std::cin >> rows;
+    std::cout << "width of map (pixels): ";
+    std::cin >> cols;
+
     // Initialize the map with walls (0)
     std::vector<std::vector<int>> map(rows, std::vector<int>(cols, 0));
 
