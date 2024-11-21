@@ -37,3 +37,6 @@
 
 # VSCode
 .vscode*
+
+# bazel build
+**/bazel*
