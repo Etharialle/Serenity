@@ -1,5 +1,5 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "./lib/stb_image_write.h"
+#include "lib/stb_image_write.h"
 #include <iostream>
 #include <vector>
 #include <cstdlib>   // For rand() and srand()
@@ -22,7 +22,7 @@ void createPNGFromArray(const std::vector<std::vector<int>>& map, const char* fi
 
             if (map[i][j] == 1) {
                 // Set a random green shade: RGB(0, random green value, 0)
-                unsigned char greenShade = 100 + (std::rand() % 156); // Random value between 100 and 255
+                unsigned char greenShade = 150 + (std::rand() % 106); // Random value between 100 and 255
                 image[index] = 0;           // R
                 image[index + 1] = greenShade; // G
                 image[index + 2] = 0;       // B

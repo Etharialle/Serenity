@@ -25,10 +25,10 @@ int main() {
     drunkardsWalk(map, startX, startY, steps);
 
     // Create the PNG from the generated map
-    createPNGFromArray(map, "../assets/overworld.png");
+    createPNGFromArray(map, "./src/overworld_generator/assets/overworld.png");
 
     // Open the generated map
-    system("xdg-open ../assets/overworld.png");
+    system("xdg-open ./src/overworld_generator/assets/overworld.png");
 
     return 0;
 }
