@@ -1,15 +1,16 @@
-#ifndef SERENITY_GAME_MAP_H_
-#define SERENITY_GAME_MAP_H_
+#ifndef GAME_MAP_H
+#define GAME_MAP_H
 
 #include <vector>
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 class GameMap {
 public:
-    GameMap(int width, int height);
-    void display() const;
+    GameMap(int width, int height, int obstacleCount);
+    ~GameMap();
+    
+    void render(SDL_Renderer* renderer, TTF_Font* font);
     void movePlayer(char direction);
     bool checkGoal();
 
@@ -17,12 +18,12 @@ private:
     int width_;
     int height_;
     std::vector<std::vector<char>> grid_;
-
     int player_x_, player_y_;
     int goal_x_, goal_y_;
 
-    void placeGoal();
     void placePlayer();
+    void placeGoal();
+    void placeObstacles(int count);
 };
 
-#endif // SERENITY_MAP_H_
+#endif // GAME_MAP_H
