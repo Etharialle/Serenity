@@ -18,7 +18,7 @@ cc_binary(
 cc_library(
     name = "game_map",
     srcs = ["src/game_map.cc"],
-    hdrs = ["src/game_map.h"],
+    hdrs = ["src/game_map.h", "src/FastNoiseLite.h"],
     visibility = ["//visibility:public"],
 )
 

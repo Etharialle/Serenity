@@ -36,8 +36,8 @@ void showGoalScreen(SDL_Renderer* renderer, TTF_Font* font) {
 }
 
 bool runGame() {
-    const int SCREEN_WIDTH = 400;
-    const int SCREEN_HEIGHT = 400;
+    const int SCREEN_WIDTH = 1200;
+    const int SCREEN_HEIGHT = 800;
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
@@ -69,7 +69,8 @@ bool runGame() {
         return false;
     }
 
-    GameMap map(10, 10, 15);
+    GameMap map(30, 20);
+    
     bool running = true;
     bool goalStatus = false;
     bool quit = false;
