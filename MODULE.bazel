@@ -1,0 +1,4 @@
+module(
+    name = "serenity",
+    version = "0.1.0",
+)
