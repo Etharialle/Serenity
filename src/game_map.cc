@@ -74,7 +74,10 @@ void GameMap::movePlayer(char direction) {
 
 bool GameMap::checkGoal() {
     // Check if the player has reached the goal
-    return (player_x_ == goal_x_ && player_y_ == goal_y_);
+    if (player_x_ == goal_x_ && player_y_ == goal_y_) {
+        return true;
+    }
+    
 }
 
 void GameMap::render(SDL_Renderer* renderer, TTF_Font* font) {
@@ -99,18 +102,25 @@ void GameMap::render(SDL_Renderer* renderer, TTF_Font* font) {
         }
     }
 
-    if (checkGoal()) {
-        // Goal reached: display message
-        SDL_Color textColor = {255, 125, 125}; // White text
-        SDL_Surface* textSurface = TTF_RenderText_Solid(font, "Goal Reached", textColor);
-        if (textSurface != nullptr) {
-            SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-            SDL_Rect textRect = { width_ * cellSize / 2 - 100, height_ * cellSize / 2, 200, 50 };
-            SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
-            SDL_FreeSurface(textSurface);
-            SDL_DestroyTexture(textTexture);
-        }
-    }
+    //if (checkGoal()) {
+    //    // Clear the screen to black
+    //    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // Set render color to black (R, G, B, A)
+    //    SDL_RenderClear(renderer);  // Clear the screen with the current draw color (black)
+//
+    //    
+    //    // Goal reached: display message
+    //    SDL_Color textColor = {255, 125, 125}; // White text
+    //    SDL_Surface* textSurface = TTF_RenderText_Solid(font, "Goal Reached", textColor);
+    //    if (textSurface != nullptr) {
+    //        SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    //        SDL_Rect textRect = { width_ * cellSize / 2 - 100, height_ * cellSize / 2, 200, 50 };
+    //        SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
+    //        SDL_FreeSurface(textSurface);
+    //        SDL_DestroyTexture(textTexture);
+    //    }
+    //    
+//
+    //}
 }
 
 GameMap::~GameMap() {}
