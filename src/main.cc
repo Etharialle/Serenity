@@ -35,52 +35,46 @@ void showGoalScreen(SDL_Renderer* renderer, TTF_Font* font) {
     SDL_RenderPresent(renderer);
 }
 
-int runGame(){
+bool runGame() {
     const int SCREEN_WIDTH = 400;
     const int SCREEN_HEIGHT = 400;
 
-    //SDL_Init(SDL_INIT_VIDEO);
-    //SDL_Window* window = SDL_CreateWindow("Serenity", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    //SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
-        return 1;
+        return false;
     }
 
     if (TTF_Init() == -1) {
         std::cerr << "SDL_ttf could not initialize! TTF_Error: " << TTF_GetError() << std::endl;
-        return 1;
+        return false;
     }
 
     SDL_Window* window = SDL_CreateWindow("Serenity", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (!window) {
         std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
-        return 1;
+        return false;
     }
 
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (!renderer) {
         std::cerr << "Renderer could not be created! SDL_Error: " << SDL_GetError() << std::endl;
-        return 1;
+        return false;
     }
 
     // Load font
-    // Usage
     std::string fontPath = getAssetPath("Merriweather-Regular.ttf");
     TTF_Font* font = TTF_OpenFont(fontPath.c_str(), 24);
-
-
-    //TTF_Font* font = TTF_OpenFont("../assets/Merriweather-Regular.ttf", 24);  // Replace with your font path
     if (!font) {
         std::cerr << "Font could not be loaded! TTF_Error: " << TTF_GetError() << std::endl;
-        return 1;
+        return false;
     }
 
     GameMap map(10, 10, 15);
     bool running = true;
     bool goalStatus = false;
     bool quit = false;
+    
+    // Main game loop
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
@@ -88,7 +82,7 @@ int runGame(){
             if (e.type == SDL_QUIT) {
                 running = false;
             } else if (goalStatus == true) {
-                std::cout << "goal reached";
+                std::cout << "Goal reached!" << std::endl;
                 running = false;
                 break;
             } else if (e.type == SDL_KEYDOWN) {
@@ -102,7 +96,7 @@ int runGame(){
             }
         }
 
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);  // White background
         SDL_RenderClear(renderer);
         map.render(renderer, font);
         SDL_RenderPresent(renderer);
@@ -110,6 +104,7 @@ int runGame(){
         SDL_Delay(100);  // Slow down movement
     }
 
+    // Goal screen loop (after the goal is reached)
     while(!running && goalStatus && !quit) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
@@ -118,8 +113,15 @@ int runGame(){
                 quit = true;
             } else if (e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym) {
-                    case SDLK_r: TTF_CloseFont(font); SDL_DestroyRenderer(renderer); SDL_DestroyWindow(window); runGame(); break;
-                    case SDLK_q: quit = true; break;
+                    case SDLK_r: 
+                        // Restart the game
+                        SDL_DestroyRenderer(renderer);
+                        SDL_DestroyWindow(window);
+                        TTF_CloseFont(font);
+                        return true;  // Return to main to restart the game
+                    case SDLK_q: 
+                        quit = true; 
+                        break;
                 }
             }
             SDL_Delay(100);  // Slow down movement
@@ -129,15 +131,20 @@ int runGame(){
     TTF_CloseFont(font);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+
+    return !quit;  // Return false if quit was pressed, true if we want to restart
 }
 
 int main() {
+    bool gameRestarted = false;
 
-    runGame();
+    // Loop to handle game restarts
+    do {
+        gameRestarted = runGame();
+    } while (gameRestarted);  // Repeat the game if the player chooses to restart
 
     TTF_Quit();
     SDL_Quit();
 
     return 0;
 }
-
