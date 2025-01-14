@@ -12,8 +12,9 @@ public:
     ~GameMap();
     
     void render(SDL_Renderer* renderer, TTF_Font* font);
-    void movePlayer(char direction);
+    int movePlayer(char direction);
     bool checkGoal();
+    void showGoalScreen(SDL_Renderer* renderer, TTF_Font* font, bool death);
 
 
 private:

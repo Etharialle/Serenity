@@ -8,32 +8,9 @@ std::string getAssetPath(const std::string& filename) {
     return "assets/" + filename;
 }
 
-void renderText(SDL_Renderer* renderer, TTF_Font* font, const std::string& text, int x, int y) {
-    SDL_Color textColor = {255, 125, 125}; // Red text color
-    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
-    if (textSurface != nullptr) {
-        SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-        SDL_Rect textRect = { x, y, textSurface->w, textSurface->h };
-        SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
-        SDL_FreeSurface(textSurface);
-        SDL_DestroyTexture(textTexture);
-    }
-}
 
-void showGoalScreen(SDL_Renderer* renderer, TTF_Font* font) {
-    // Clear the screen with black
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // Black color
-    SDL_RenderClear(renderer);
 
-    // Render "Goal reached"
-    renderText(renderer, font, "Goal Reached!", 100, 100);
 
-    // Render options: Quit or Restart
-    renderText(renderer, font, "Press Q to Quit or R to Restart", 50, 150);
-
-    // Present the screen
-    SDL_RenderPresent(renderer);
-}
 
 bool runGame() {
     const int SCREEN_WIDTH = 1200;
@@ -69,11 +46,12 @@ bool runGame() {
         return false;
     }
 
-    GameMap map(30, 20);
+    GameMap map(60, 40);
     
     bool running = true;
     bool goalStatus = false;
     bool quit = false;
+    bool death = false;
     
     // Main game loop
     while (running) {
@@ -87,11 +65,12 @@ bool runGame() {
                 running = false;
                 break;
             } else if (e.type == SDL_KEYDOWN) {
+                int moved = 0;
                 switch (e.key.keysym.sym) {
-                    case SDLK_w: map.movePlayer('w'); break;
-                    case SDLK_s: map.movePlayer('s'); break;
-                    case SDLK_a: map.movePlayer('a'); break;
-                    case SDLK_d: map.movePlayer('d'); break;
+                    case SDLK_w: moved = map.movePlayer('w'); if (moved == 1) {death = true; running = false;} break;
+                    case SDLK_s: moved = map.movePlayer('s'); if (moved == 1) {death = true; running = false;} break;
+                    case SDLK_a: moved = map.movePlayer('a'); if (moved == 1) {death = true; running = false;} break;
+                    case SDLK_d: moved = map.movePlayer('d'); if (moved == 1) {death = true; running = false;} break;
                     case SDLK_q: running = false; break;
                 }
             }
@@ -109,7 +88,7 @@ bool runGame() {
     while(!running && goalStatus && !quit) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            showGoalScreen(renderer, font);
+            map.showGoalScreen(renderer, font, death);
             if (e.type == SDL_QUIT) {
                 quit = true;
             } else if (e.type == SDL_KEYDOWN) {

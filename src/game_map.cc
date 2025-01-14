@@ -87,7 +87,7 @@ void GameMap::placeGoal() {
     }
 }
 
-void GameMap::movePlayer(char direction) {
+int GameMap::movePlayer(char direction) {
     int new_x = player_x_;
     int new_y = player_y_;
 
@@ -114,7 +114,7 @@ void GameMap::movePlayer(char direction) {
             // Handle drowning scenario (e.g., reset player position or end the game)
             std::cout << "You drowned!" << std::endl;
             // Optionally reset the game or do some other action
-            return;
+            return 1; //death by drowning
         }
 
         // Update the grid and player's position
@@ -123,6 +123,7 @@ void GameMap::movePlayer(char direction) {
         player_y_ = new_y;
         grid_[player_y_][player_x_] = 'P';  // Place player at new position
     }
+    return 0;
 }
 
 
@@ -134,7 +135,7 @@ bool GameMap::checkGoal() {
 }
 
 void GameMap::render(SDL_Renderer* renderer, TTF_Font* font) {
-    int cellSize = 40;  // Size of each grid cell
+    int cellSize = 20;  // Size of each grid cell
 
     for (int y = 0; y < height_; y++) {
         for (int x = 0; x < width_; x++) {
@@ -159,5 +160,37 @@ void GameMap::render(SDL_Renderer* renderer, TTF_Font* font) {
     }
 }
 
+void renderText(SDL_Renderer* renderer, TTF_Font* font, const std::string& text, int x, int y) {
+    SDL_Color textColor = {255, 125, 125}; // Red text color
+    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
+    if (textSurface != nullptr) {
+        SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+        SDL_Rect textRect = { x, y, textSurface->w, textSurface->h };
+        SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
+        SDL_FreeSurface(textSurface);
+        SDL_DestroyTexture(textTexture);
+    }
+}
+
+
+void GameMap::showGoalScreen(SDL_Renderer* renderer, TTF_Font* font, bool death) {
+    // Clear the screen with black
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // Black color
+    SDL_RenderClear(renderer);
+
+    // Render Death
+    if (death == true) {
+        renderText(renderer, font, "Death by drowning!", 100, 100);
+    } else {
+        // Render "Goal reached"
+        renderText(renderer, font, "Goal Reached!", 100, 100);\
+    }
+
+    // Render options: Quit or Restart
+    renderText(renderer, font, "Press Q to Quit or R to Restart", 50, 150);
+
+    // Present the screen
+    SDL_RenderPresent(renderer);
+}
 
 GameMap::~GameMap() {}
